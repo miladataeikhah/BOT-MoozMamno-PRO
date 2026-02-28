@@ -1,6 +1,5 @@
 import os
 import time
-from dotenv import load_dotenv
 from telegram import (
     Update,
     ReplyKeyboardMarkup,
@@ -14,8 +13,6 @@ from telegram.ext import (
     filters,
 )
 import database as db
-
-load_dotenv()
 
 TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
 ADMIN_ID = int(os.getenv("ADMIN_ID"))
@@ -95,11 +92,20 @@ async def admin_panel(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 if __name__ == "__main__":
+    print("BOT-MoozMamno PRO running...")
+
     app = ApplicationBuilder().token(TOKEN).build()
 
     app.add_handler(CommandHandler("start", start))
     app.add_handler(CommandHandler("admin", admin_panel))
     app.add_handler(MessageHandler(filters.ALL, handle_message))
 
-    print("BOT-MoozMamno PRO running...")
-    app.run_polling()
+    PORT = int(os.environ.get("PORT", 10000))
+    RENDER_EXTERNAL_URL = os.environ.get("RENDER_EXTERNAL_URL")
+
+    app.run_webhook(
+        listen="0.0.0.0",
+        port=PORT,
+        url_path="webhook",
+        webhook_url=f"{RENDER_EXTERNAL_URL}/webhook"
+    )
