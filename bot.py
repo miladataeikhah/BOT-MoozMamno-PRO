@@ -18,7 +18,7 @@ import database as db
 load_dotenv()
 
 TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
-ADMIN_ID = int(os.getenv("ADMIN_ID"))
+ADMIN_ID = int(os.getenv("123456789"))
 
 user_last_message = {}
 
